@@ -5,11 +5,11 @@ import { Outlet } from "react-router-dom";
 
 function Sidebar() {
   return (
-    <div className="bg-stone-900 p-10 rounded-md pt-6 pb-6 flex flex-col items-center h-[calc(100vh-3rem)]">
+    <div className="bg-stone-900 p-10 rounded-md pt-6 pb-6 flex flex-col items-center h-[calc(100vh)]">
       <Logo />
       <AppNav />
       <Outlet />
-      <footer className="mt-auto">
+      <footer className="mt-2">
         <p className="text-sm text-stone-300">
           &copy; Copyright {new Date().getFullYear()} by WorldWise Inc{" "}
         </p>

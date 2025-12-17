@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 function Logo() {
   return (
     <Link to="/">
-      <img src="/logo.png" alt="WorldWise logo" className="h-[5.2rem]" />
+      <img src="/logo.png" alt="WorldWise logo" className="h-[4.2rem]" />
     </Link>
   );
 }

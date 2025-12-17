@@ -2,6 +2,7 @@ import { useState } from "react";
 import React from "react";
 import Button from "./Button.jsx";
 import BackButton from "./BackButton.jsx";
+import {useSearchParams } from "react-router-dom";
 
 const inputBaseClasses =
   "w-full p-2 rounded-md bg-gray-800 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-gray-100 placeholder-gray-400 transition-all text-base";
@@ -15,7 +16,9 @@ function Form() {
   // const [country, setCountry] = useState("");
   const [date, setDate] = useState(new Date());
   const [notes, setNotes] = useState("");
-
+  const [serachParms] = useSearchParams();
+  const lat = serachParms.get("lat");
+  const lng = serachParms.get("lng");
   return (
     <form className="bg-gray-700 rounded-lg p-5 px-5 w-full flex flex-col gap-3">
       <div className="flex flex-col gap-1 relative">
@@ -61,7 +64,7 @@ function Form() {
         <Button type="primary" className={btnPrimaryClasses}>
           Add
         </Button>
-        <BackButton/>
+        <BackButton />
       </div>
     </form>
   );
