@@ -5,6 +5,10 @@ import BackButton from "./BackButton.jsx";
 import { useUrlPosition } from "../hooks/useUrlPosition.js";
 import Message from "./Message.jsx";
 import Spinner from "./Spinner.jsx";
+import { DatePicker } from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { useCities } from "../contexts/CitiesContext.jsx";
+import { useNavigate } from "react-router-dom";
 
 const BASE_URL = "https://api.bigdatacloud.net/data/reverse-geocode-client";
 
@@ -24,15 +28,15 @@ const btnPrimaryClasses = `${btnBaseClasses} cursor-pointer bg-emerald-500 text-
 
 function Form() {
   const { mapLat: lat, mapLng: lng } = useUrlPosition();
-
+  const navigate = useNavigate();
   const [cityName, setCityName] = useState("");
   const [country, setCountry] = useState("");
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [date, setDate] = useState(new Date());
   const [notes, setNotes] = useState("");
   const [isLoadingGeocoding, setIsLoadingGeocoding] = useState(false);
   const [emoji, setEmoji] = useState("");
   const [geocodingError, setGeocodingError] = useState("");
-
+  const { createCity, isLoading } = useCities();
   useEffect(
     function () {
       if (!lat && !lng) return;
@@ -70,8 +74,30 @@ function Form() {
 
   if (geocodingError) return <Message message={geocodingError} />;
 
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!cityName || !date) return;
+    const newCity = {
+      cityName,
+      country,
+      emoji,
+      date,
+      notes,
+      position: { lat, lng },
+    };
+    createCity(newCity);
+
+    navigate("/app/cities");
+  }
   return (
-    <form className="bg-gray-700 rounded-lg p-5 px-5 w-full flex flex-col gap-3">
+    <form
+      onSubmit={handleSubmit}
+      className={`bg-gray-700 rounded-lg p-5 px-5 w-full flex flex-col gap-3 ${
+        isLoading
+          ? "pointer-events-none bg-gray-200 border-gray-200 text-gray-400"
+          : ""
+      }`}
+    >
       <div className="flex flex-col gap-1 relative">
         <label htmlFor="cityName" className="text-gray-300 font-medium text-sm">
           City name
@@ -89,12 +115,12 @@ function Form() {
         <label htmlFor="date" className="text-gray-300 font-medium text-sm">
           When did you go to {cityName}?
         </label>
-        <input
-          type="date"
-          id="date"
-          onChange={(e) => setDate(e.target.value)}
-          value={date}
+        <DatePicker
+          id="for"
           className={inputBaseClasses}
+          onChange={(date) => setDate(date)}
+          selected={date}
+          dateFormat="DD/MM/yyyy"
         />
       </div>
 
